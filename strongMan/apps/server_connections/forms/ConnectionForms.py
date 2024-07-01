@@ -53,7 +53,9 @@ class ChooseTypeForm(AbstractDynamicForm):
     def get_choices_site_to_site(cls):
         return tuple((
             tuple((type(Ike2CertificateForm()).__name__, Ike2CertificateForm().model.choice_name)),
-            tuple((type(Ike2EapTlsForm()).__name__, Ike2EapTlsForm().model.choice_name))
+            tuple((type(Ike2EapTlsForm()).__name__, Ike2EapTlsForm().model.choice_name)),
+            ######### adding psk option #######
+            tuple((type(pskForm()).__name__, pskForm().model.choice_name))
         ))
 
 
