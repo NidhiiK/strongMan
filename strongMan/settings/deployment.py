@@ -1,6 +1,6 @@
 from .base import *
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','221.171.86.109']
 
 DEBUG = False
 
