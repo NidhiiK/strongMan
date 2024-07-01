@@ -214,7 +214,7 @@ class IKEv2EapTls(Connection):
 
     @classmethod
     def choice_name(cls):
-        return "IKEv2 EAP-TLS"
+        return "IKEv2 EAP-TLS (Certificate)"
     
 
 
