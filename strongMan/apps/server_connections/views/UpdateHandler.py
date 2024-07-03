@@ -5,7 +5,7 @@ from django.contrib import messages
 from ..forms.ConnectionForms import AbstractConnectionForm, AbstractDynamicForm
 from ..models.connections import Connection, Ike2Psk
 from .ToggleHandler import ToggleHandler
-from ..utils import generate_psk
+from strongMan.apps.server_connections.utils import generate_psk
 
 
 class UpdateHandler(object):

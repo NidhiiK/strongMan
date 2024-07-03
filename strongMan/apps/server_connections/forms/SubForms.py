@@ -5,7 +5,7 @@ from strongMan.apps.server_connections.models import Connection, Child, Address,
     EapCertificateAuthentication, EapTlsAuthentication, IKEv2Certificate, IKEv2CertificateEAP,Ike2Psk
 from .FormFields import CertificateChoice, IdentityChoice, PoolChoice
 from strongMan.apps.pools.models import Pool
-from django.db import models  ####
+
 
 
 

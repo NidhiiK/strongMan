@@ -15,7 +15,7 @@ from strongMan.helper_apps.vici.wrapper.wrapper import ViciWrapper
 from .specific import Child, Address, Proposal, LogMessage
 from .authentication import Authentication, AutoCaAuthentication
 from strongMan.apps.certificates.models.certificates import Certificate
-from ..utils import generate_psk
+from strongMan.apps.server_connections.utils import generate_psk
 
 class Connection(models.Model):
     VERSION_CHOICES = (
