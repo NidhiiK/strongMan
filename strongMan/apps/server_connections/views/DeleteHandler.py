@@ -22,6 +22,11 @@ class DeleteHandler(object):
             messages.warning(self.request, str(e))
 
         profilname = connection.profile
+
+        if hasattr(connection, 'psk'):
+            # Logic to remove PSK from wherever it is stored
+            pass
+        
         connection.delete()
         messages.info(self.request, "Connection " + profilname + " deleted.")
         return HttpResponseRedirect(reverse("server_connections:index"))

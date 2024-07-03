@@ -217,8 +217,18 @@ class IKEv2EapTls(Connection):
         return "IKEv2 EAP-TLS (Certificate)"
     
 
+from ..utils import generate_psk
 
-class psk(Connection):
+class Connection(models.Model):
+    #existing fields
+    profile = models.CharField(max_length=100)
+    psk = models.CharField(max_length=64, blank=True, null=True)
+
+    def update_psk(self):
+        self.psk = generate_psk()
+        self.save()
+
+class Ike2Psk(Connection):
 
     @classmethod
     def choice_name(cls):

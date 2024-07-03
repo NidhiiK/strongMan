@@ -15,4 +15,11 @@ class StateHandler(object):
     def handle(self):
         response = dict(id=self.connection.id, success=True)
         response['state'] = self.connection.state
+
+   
+       # Include PSK information 
+        if hasattr(self.connection, 'psk'):
+            response['psk'] = self.connection.psk.psk_value
+
+
         return JsonResponse(response)

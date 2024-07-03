@@ -4,7 +4,7 @@ from django import forms
 from strongMan.apps.server_connections.forms.SubForms import HeaderForm, RemoteCertificateForm, \
     RemoteIdentityForm, ServerCertificateForm, EapForm, EapCertificateForm, EapTlsForm, PoolForm
 from strongMan.apps.server_connections.models.connections import IKEv2Certificate, IKEv2EAP, \
-    IKEv2CertificateEAP, IKEv2EapTls, psk
+    IKEv2CertificateEAP, IKEv2EapTls, Ike2Psk, Connection
 
 
 class AbstractDynamicForm(forms.Form):
@@ -55,7 +55,7 @@ class ChooseTypeForm(AbstractDynamicForm):
             tuple((type(Ike2CertificateForm()).__name__, Ike2CertificateForm().model.choice_name)),
             tuple((type(Ike2EapTlsForm()).__name__, Ike2EapTlsForm().model.choice_name)),
             ######### adding psk option #######
-            tuple((type(pskForm()).__name__, pskForm().model.choice_name))
+            tuple((type(Ike2PskForm()).__name__, Ike2PskForm().model.choice_name))
         ))
 
 
@@ -176,16 +176,40 @@ class Ike2EapTlsForm(AbstractConnectionForm, HeaderForm, RemoteCertificateForm, 
         self.update_certificates()
 
 
+from ..utils import generate_psk
 
-class pskForm(AbstractConnectionForm, HeaderForm, RemoteCertificateForm, RemoteIdentityForm,
+class Ike2PskForm(AbstractConnectionForm, HeaderForm, RemoteCertificateForm, RemoteIdentityForm,
                      EapTlsForm, PoolForm):
     @property
     def model(self):
-        return psk
+        return Ike2Psk
 
     @property
     def template(self):
         return "server_connections/forms/psk.html"
 
-    def update_certs(self):
-        self.update_certificates()
+    # def update_certs(self):
+    #     self.update_certificates()
+
+    psk = forms.CharField(label="Pre-Shared Key", required=True, widget=forms.PasswordInput)
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        if not instance.psk:
+            instance.psk = generate_psk()
+        if commit:
+            instance.save()
+        return instance
+
+    def save_psk(self):
+        psk = self.cleaned_data.get('psk')
+        if not psk:
+            psk = generate_psk()
+        connection = Connection.objects.create(
+            profile=self.cleaned_data['profile'],
+            psk=psk,
+            # other fields
+        )
+        connection.save()
+        return connection
+

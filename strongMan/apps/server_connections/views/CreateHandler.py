@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
 
-from ..forms.ConnectionForms import AbstractDynamicForm, ChooseTypeForm
+from ..forms.ConnectionForms import AbstractDynamicForm, ChooseTypeForm, Ike2PskForm
 from ..forms.SubForms import HeaderForm
 
 
@@ -46,4 +46,12 @@ class AddHandler(object):
                 form.create_connection(self.connection_type)
                 messages.success(self.request, "Connection " + form.cleaned_data['profile'] +
                                  " has been updated.")
+                return redirect(reverse("server_connections:index"))
+
+            # Handle PSK form
+            if form_class == Ike2PskForm:
+                #
+                form.save_psk()  # 
+                messages.success(self.request, "PSK Connection " + form.cleaned_data['profile'] +
+                                 " has been created.")
                 return redirect(reverse("server_connections:index"))

@@ -22,6 +22,16 @@ class SaTerminateHandler(object):
             connection = Connection.objects.get(id=self.conn_id).subclass()
             vici_wrapper = ViciWrapper()
             logs = None
+
+            
+            # PSK Cleanup Logic
+            if hasattr(connection, 'psk'):
+                # Logic to remove PSK when SA is terminated
+                psk = connection.psk
+                psk.delete()  # 
+
+
+
             if hasattr(self, 'sa_id'):
                 logs = vici_wrapper.terminate_ike_sa(self.sa_id)
             elif hasattr(self, 'child_sa_id'):

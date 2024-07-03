@@ -3,8 +3,9 @@ from django.urls import reverse
 from django.contrib import messages
 
 from ..forms.ConnectionForms import AbstractConnectionForm, AbstractDynamicForm
-from ..models.connections import Connection
+from ..models.connections import Connection, Ike2Psk
 from .ToggleHandler import ToggleHandler
+from ..utils import generate_psk
 
 
 class UpdateHandler(object):
@@ -77,6 +78,11 @@ class UpdateHandler(object):
                 form.update_certs()
                 if not form.is_valid():
                     return self._render(form)
+                
+
+                if isinstance(self.connection, Ike2Psk):
+                    if not form.cleaned_data.get('psk'):
+                        form.cleaned_data['psk'] = generate_psk()
 
                 form.update_connection(self.id)
 

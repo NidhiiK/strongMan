@@ -2,7 +2,7 @@ from django import forms
 from strongMan.apps.certificates.models import UserCertificate, AbstractIdentity
 from strongMan.apps.server_connections.models import Connection, Child, Address, Proposal, \
     AutoCaAuthentication, CaCertificateAuthentication, CertificateAuthentication, EapAuthentication, \
-    EapCertificateAuthentication, EapTlsAuthentication, IKEv2Certificate, IKEv2CertificateEAP
+    EapCertificateAuthentication, EapTlsAuthentication, IKEv2Certificate, IKEv2CertificateEAP,Ike2Psk
 from .FormFields import CertificateChoice, IdentityChoice, PoolChoice
 from strongMan.apps.pools.models import Pool
 
@@ -413,3 +413,25 @@ class EapForm(ServerCertificateForm):
             if isinstance(sub, EapAuthentication):
                 sub.identity = self.my_identity
                 sub.save()
+
+
+
+class Ike2PskForm(HeaderForm, PoolForm):
+    psk = forms.CharField(label="Pre-Shared Key", required=True, widget=forms.PasswordInput)
+
+    def fill(self, connection):
+        super().fill(connection)
+        if isinstance(connection, Ike2Psk):
+            self.initial['psk'] = connection.psk
+
+    def create_connection(self, connection):
+        super().create_connection(connection)
+        if isinstance(connection, Ike2Psk):
+            connection.psk = self.cleaned_data['psk']
+            connection.save()
+
+    def update_connection(self, connection):
+        super().update_connection(connection)
+        if isinstance(connection, Ike2Psk):
+            connection.psk = self.cleaned_data['psk']
+            connection.save()           

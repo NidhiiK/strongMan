@@ -24,6 +24,12 @@ class ToggleHandler(object):
                 connection.load()
             elif state == State.LOADED.value:
                 connection.unload()
+
+
+            #PSK handling logic
+            if hasattr(connection, 'psk'):
+                response['psk'] = connection.psk.psk_value
+
             response['success'] = True
         except ViciException as e:
             response['message'] = str(e)
@@ -41,6 +47,13 @@ class ToggleHandler(object):
                 connection.stop()
             elif state == State.LOADED.value:
                 connection.unload()
+
+
+            #PSK handling logic
+            if hasattr(connection, 'psk'):
+                response['psk'] = connection.psk.psk_value
+            
+               
             response['success'] = True
         except ViciException as e:
             response['message'] = str(e)
@@ -58,6 +71,13 @@ class ToggleHandler(object):
                 connection.start()
             elif state == State.UNLOADED.value:
                 connection.load()
+
+
+            #PSK handling logic
+            if hasattr(connection, 'psk'):
+                response['psk'] = connection.psk.psk_value
+
+
             response['success'] = True
         except ViciException as e:
             response['message'] = str(e)
