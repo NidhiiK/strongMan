@@ -5,7 +5,27 @@ from strongMan.apps.server_connections.models import Connection, Child, Address,
     EapCertificateAuthentication, EapTlsAuthentication, IKEv2Certificate, IKEv2CertificateEAP,Ike2Psk
 from .FormFields import CertificateChoice, IdentityChoice, PoolChoice
 from strongMan.apps.pools.models import Pool
+from django.db import models  ####
 
+
+
+
+########## Version Choices ######################
+
+
+
+class Connection(models.Model):
+    # Define version choices
+    VERSION_CHOICES = [
+        ('1', 'Version 1'),
+        ('2', 'Version 2'),
+    ]
+
+    # Other fields for the Connection model
+    version = models.CharField(max_length=2, choices=VERSION_CHOICES)
+
+
+##############################################
 
 class HeaderForm(forms.Form):
     connection_id = forms.IntegerField(required=False)
