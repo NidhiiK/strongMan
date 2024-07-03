@@ -219,7 +219,7 @@ class Ike2Psk(Connection):
 
     @classmethod
     def choice_name(cls):
-        return "PSK"    
+        return "Pre Shared Key (PSK)"    
 
     def update_psk(self):
         self.psk = generate_psk()
