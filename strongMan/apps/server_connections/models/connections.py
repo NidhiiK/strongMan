@@ -15,7 +15,7 @@ from strongMan.helper_apps.vici.wrapper.wrapper import ViciWrapper
 from .specific import Child, Address, Proposal, LogMessage
 from .authentication import Authentication, AutoCaAuthentication
 from strongMan.apps.certificates.models.certificates import Certificate
-
+from ..utils import generate_psk
 
 class Connection(models.Model):
     VERSION_CHOICES = (
@@ -24,7 +24,7 @@ class Connection(models.Model):
         ('2', "IKEv2"),
     )
 
-    profile = models.TextField(unique=True)
+    profile = models.CharField(max_length=100, unique=True)
     version = models.CharField(max_length=1, choices=VERSION_CHOICES, default=None)
     pool = models.ForeignKey(Pool, null=True, blank=True, default=None, related_name='server_pool',
                              on_delete=PROTECT)
@@ -32,6 +32,7 @@ class Connection(models.Model):
     enabled = models.BooleanField(default=False)
     connection_type = models.TextField()
     initiate = models.BooleanField(null=True, blank=True, default=None)
+    psk = models.CharField(max_length=64, blank=True, null=True)
 
     def dict(self):
         children = OrderedDict()
@@ -50,10 +51,7 @@ class Connection(models.Model):
         ike_sa['version'] = self.version
         ike_sa['proposals'] = [proposal.type for proposal in self.server_proposals.all()]
         ike_sa['children'] = children
-        if self.send_certreq == '1':
-            ike_sa['send_certreq'] = 'yes'
-        else:
-            ike_sa['send_certreq'] = 'no'
+        ike_sa['send_certreq'] = 'yes' if self.send_certreq else 'no'
 
         for local in self.server_local.all():
             local = local.subclass()
@@ -145,7 +143,7 @@ class Connection(models.Model):
     @property
     def state(self):
         vici_wrapper = ViciWrapper()
-        if self.is_remote_access() or self.is_site_to_site() and not self.initiate:
+        if self.is_remote_access() or (self.is_site_to_site() and not self.initiate):
             try:
                 loaded = vici_wrapper.is_connection_loaded(self.profile)
                 if loaded:
@@ -215,40 +213,32 @@ class IKEv2EapTls(Connection):
     @classmethod
     def choice_name(cls):
         return "IKEv2 EAP-TLS (Certificate)"
-    
 
-from ..utils import generate_psk
-
-class Connection(models.Model):
-    #existing fields
-    profile = models.CharField(max_length=100)
-    psk = models.CharField(max_length=64, blank=True, null=True)
-
-    def update_psk(self):
-        self.psk = generate_psk()
-        self.save()
 
 class Ike2Psk(Connection):
 
     @classmethod
     def choice_name(cls):
         return "PSK"    
-    
+
+    def update_psk(self):
+        self.psk = generate_psk()
+        self.save()
 
 
-    @receiver(pre_delete, sender=Connection)
-    def delete_all_connected_models(sender, instance, **kwargs):
-        for child in Child.objects.filter(connection=instance):
-            Proposal.objects.filter(child=child).delete()
-            Address.objects.filter(local_ts=child).delete()
-            Address.objects.filter(remote_ts=child).delete()
-            child.delete()
-        Proposal.objects.filter(connection=instance).delete()
-        Address.objects.filter(local_addresses=instance).delete()
-        Address.objects.filter(remote_addresses=instance).delete()
+@receiver(pre_delete, sender=Connection)
+def delete_all_connected_models(sender, instance, **kwargs):
+    for child in Child.objects.filter(connection=instance):
+        Proposal.objects.filter(child=child).delete()
+        Address.objects.filter(local_ts=child).delete()
+        Address.objects.filter(remote_ts=child).delete()
+        child.delete()
+    Proposal.objects.filter(connection=instance).delete()
+    Address.objects.filter(local_addresses=instance).delete()
+    Address.objects.filter(remote_addresses=instance).delete()
 
-        for local in Authentication.objects.filter(local=instance):
-            local.delete()
+    for local in Authentication.objects.filter(local=instance):
+        local.delete()
 
-        for remote in Authentication.objects.filter(remote=instance):
-            remote.delete()
+    for remote in Authentication.objects.filter(remote=instance):
+        remote.delete()

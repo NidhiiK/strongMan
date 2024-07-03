@@ -14,15 +14,15 @@ from django.db import models  ####
 
 
 
-class Connection(models.Model):
-    # Define version choices
-    VERSION_CHOICES = [
-        ('1', 'Version 1'),
-        ('2', 'Version 2'),
-    ]
+# class Connection(models.Model):
+#     # Define version choices
+#     VERSION_CHOICES = [
+#         ('1', 'Version 1'),
+#         ('2', 'Version 2'),
+#     ]
 
-    # Other fields for the Connection model
-    version = models.CharField(max_length=2, choices=VERSION_CHOICES)
+#     # Other fields for the Connection model
+#     version = models.CharField(max_length=2, choices=VERSION_CHOICES)
 
 
 ##############################################
