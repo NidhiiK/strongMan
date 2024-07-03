@@ -2,32 +2,45 @@
 {% load connections_extras %}
 {% block form_content %}
     <div class="row picker">
-        <label class="control-label col-sm-3 col-xs-12">Generate PSK</label>
-        <div class="controls col-sm-8 col-xs-10">
-            <button type="button" class="btn btn-primary" id="generate-psk">Generate PSK</button>
-            <input type="text" class="form-control" id="psk-field" name="psk" readonly>
-        </div>
-        <div class="col-sm-1 col-xs-2">
-            {% include "server_connections/widgets/QuestionPopover.html" with title="PSK Generation help" content="Click to generate a Pre-Shared Key (PSK)." %}
+        <p class="col-xs-12">Remote settings</p>
+        <!-- Remove the section for selecting remote authentication method -->
+
+        <hr>
+
+        <div class="row picker">
+            <label class="control-label col-sm-3 col-xs-12">Generate PSK</label>
+            <div class="controls col-sm-8 col-xs-10">
+                <div class="input-group">
+                    <button type="button" class="btn btn-primary" id="generate-psk-btn">Generate PSK</button>
+                    <input type="text" class="form-control" id="psk" name="psk" readonly>
+                </div>
+            </div>
+            <div class="col-sm-1 col-xs-2">
+                {% include "server_connections/widgets/QuestionPopover.html" with title="PSK Generation help" content="Click to generate a Pre-Shared Key (PSK)." %}
+            </div>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-    $(document).ready(function() {
-        $('#generate-psk').click(function() {
-            $.ajax({
-                url: '/generate_psk/',  // Replace with your actual URL endpoint for PSK generation
-                type: 'GET',
-                success: function(data) {
-                    $('#psk-field').val(data.psk);  // Assuming data.psk contains the generated PSK
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error generating PSK:', error);
-                }
+        $(document).ready(function() {
+            // Event listener for generating PSK
+            $("#generate-psk-btn").on("click", function () {
+                var newPsk = generatePsk();
+                $("#psk").val(newPsk);
             });
-        });
-    });
-    </script>
 
+            // Function to generate PSK
+            function generatePsk() {
+                var pskLength = 56; // Adjust the length as needed
+                var psk = "";
+                var characters = "abcdef0123456789";
+                for (var i = 0; i < pskLength; i++) {
+                    var randomIndex = Math.floor(Math.random() * characters.length);
+                    psk += characters[randomIndex];
+                }
+                return psk;
+            }
+        });
+    </script>
+    
 {% endblock form_content %}
