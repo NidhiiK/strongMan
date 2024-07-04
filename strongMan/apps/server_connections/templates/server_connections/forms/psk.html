@@ -8,16 +8,23 @@
         <hr>
 
         <div class="row picker">
-            <label class="control-label col-sm-3 col-xs-12">Encryption Algorithms</label>
-            <div class="controls col-sm-8 col-xs-10">
-                <select class="form-control" name="proposal_type">
-                    {% for proposal_type, proposal_name in proposal_choices %}
-                        <option value="{{ proposal_type }}">{{ proposal_name }}</option>
-                    {% endfor %}
-                </select>
+            <label class="control-label col-sm-3 col-xs-12">Encryption Algorithm</label>
+            <div class="controls col-sm-3 col-xs-6">
+                {{ form.encryption_algorithm }}
             </div>
-            <div class="col-sm-1 col-xs-2">
-                {% include "server_connections/widgets/QuestionPopover.html" with title="Encryption Algorithms Help" content="Select the encryption algorithm for proposals." %}
+            
+            <label class="control-label col-sm-3 col-xs-12">Hash Option</label>
+            <div class="controls col-sm-3 col-xs-6">
+                {{ form.hash_option }}
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row picker">
+            <label class="control-label col-sm-3 col-xs-12">DH Group</label>
+            <div class="controls col-sm-3 col-xs-6">
+                {{ form.dh_group }}
             </div>
         </div>
 
