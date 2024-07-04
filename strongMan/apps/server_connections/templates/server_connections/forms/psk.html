@@ -10,12 +10,20 @@
         <div class="row picker">
             <label class="control-label col-sm-3 col-xs-12">Encryption Algorithm</label>
             <div class="controls col-sm-3 col-xs-6">
-                {{ form.encryption_algorithm }}
+                <select class="form-control" name="encryption_algorithm">
+                    {% for algorithm in encryption_algorithms %}
+                        <option value="{{ algorithm }}">{{ algorithm }}</option>
+                    {% endfor %}
+                </select>
             </div>
             
             <label class="control-label col-sm-3 col-xs-12">Hash Option</label>
             <div class="controls col-sm-3 col-xs-6">
-                {{ form.hash_option }}
+                <select class="form-control" name="hash_option">
+                    {% for hash_option in hash_options %}
+                        <option value="{{ hash_option }}">{{ hash_option }}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
 
@@ -24,7 +32,11 @@
         <div class="row picker">
             <label class="control-label col-sm-3 col-xs-12">DH Group</label>
             <div class="controls col-sm-3 col-xs-6">
-                {{ form.dh_group }}
+                <select class="form-control" name="dh_group">
+                    {% for dh_group in dh_groups %}
+                        <option value="{{ dh_group }}">{{ dh_group }}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
 
