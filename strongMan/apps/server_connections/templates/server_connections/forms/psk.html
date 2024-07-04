@@ -12,11 +12,23 @@
             <div class="controls col-sm-8 col-xs-10">
                 <div class="input-group">
                     <button type="button" class="btn btn-primary" id="generate-psk-btn">Generate PSK</button>
-                    <input type="text" class="form-control" id="psk" name="psk" readonly>
+                    <input type="text" class="form-control" id="generated-psk" readonly>
                 </div>
             </div>
             <div class="col-sm-1 col-xs-2">
                 {% include "server_connections/widgets/QuestionPopover.html" with title="PSK Generation help" content="Click to generate a Pre-Shared Key (PSK)." %}
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row picker">
+            <label class="control-label col-sm-3 col-xs-12">Enter PSK</label>
+            <div class="controls col-sm-8 col-xs-10">
+                <input type="text" class="form-control" id="manual-psk" name="psk">
+            </div>
+            <div class="col-sm-1 col-xs-2">
+                {% include "server_connections/widgets/QuestionPopover.html" with title="PSK Entry help" content="Manually enter a Pre-Shared Key (PSK)." %}
             </div>
         </div>
     </div>
@@ -26,7 +38,8 @@
             // Event listener for generating PSK
             $("#generate-psk-btn").on("click", function () {
                 var newPsk = generatePsk();
-                $("#psk").val(newPsk);
+                $("#generated-psk").val(newPsk);
+                $("#manual-psk").val(newPsk);  // Optionally copy the generated PSK to the manual input field
             });
 
             // Function to generate PSK
