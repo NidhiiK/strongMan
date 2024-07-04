@@ -8,25 +8,6 @@ from strongMan.apps.pools.models import Pool
 
 
 
-
-
-########## Version Choices ######################
-
-
-
-# class Connection(models.Model):
-#     # Define version choices
-#     VERSION_CHOICES = [
-#         ('1', 'Version 1'),
-#         ('2', 'Version 2'),
-#     ]
-
-#     # Other fields for the Connection model
-#     version = models.CharField(max_length=2, choices=VERSION_CHOICES)
-
-
-##############################################
-
 class HeaderForm(forms.Form):
     connection_id = forms.IntegerField(required=False)
     profile = forms.CharField(max_length=50, initial="")
