@@ -7,12 +7,9 @@ from strongMan.apps.server_connections.models.connections import IKEv2Certificat
     IKEv2CertificateEAP, IKEv2EapTls, Ike2Psk, Connection
 
 
+from django import forms
 
-# Proposals algorithms
-
-
-
-class ConnectionForm(forms.Form):
+class ProposalForm(forms.Form):
     encryption_algorithm_choices = [
         ("AES128", "AES128"),
         ("AES192", "AES192"),
@@ -54,7 +51,6 @@ class ConnectionForm(forms.Form):
     encryption_algorithm = forms.ChoiceField(choices=encryption_algorithm_choices)
     hash_option = forms.ChoiceField(choices=hash_option_choices)
     dh_group = forms.ChoiceField(choices=dh_group_choices)
-
 
 
 

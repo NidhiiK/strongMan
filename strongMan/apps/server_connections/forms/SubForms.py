@@ -84,9 +84,11 @@ class HeaderForm(forms.Form):
         raise NotImplementedError
 
     @staticmethod
-    def _set_proposals(connection, child):
-        Proposal(type="aes128-sha256-modp2048", connection=connection).save()
-        Proposal(type="aes128gcm128-modp2048", child=child).save()
+    def _set_proposals(connection, child, proposal_type=None):
+        default_proposal = "aes128-sha256-modp2048"
+        proposal_type = proposal_type or default_proposal
+        Proposal(type=proposal_type, connection=connection).save()
+        Proposal(type=proposal_type, child=child).save()
 
     @staticmethod
     def _set_addresses(connection, child, local_addrs, remote_addrs, local_ts, remote_ts):

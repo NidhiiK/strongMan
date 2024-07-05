@@ -20,4 +20,37 @@
     {% include "server_connections/forms/CaPicker.html" with form=form %}
 
     <hr>
+
+    <!-- New Section for Encryption Algorithm Options -->
+    <div class="row">
+        <div class="col-xs-12">
+            <p>Encryption Algorithm</p>
+            <div class="form-group">
+                <label for="encryption_algorithm">Encryption</label>
+                <select id="encryption_algorithm" name="encryption_algorithm" class="form-control">
+                    {% for algorithm in encryption_algorithms %}
+                        <option value="{{ algorithm }}">{{ algorithm }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="hash_option">Hash</label>
+                <select id="hash_option" name="hash_option" class="form-control">
+                    {% for option in hash_options %}
+                        <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dh_group">DH</label>
+                <select id="dh_group" name="dh_group" class="form-control">
+                    {% for group in dh_groups %}
+                        <option value="{{ group }}">{{ group }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <hr>
 {% endblock form_content %}
