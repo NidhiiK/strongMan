@@ -28,19 +28,45 @@
             <div class="form-group">
                 <label for="encryption_algorithm">Encryption</label>
                 <select id="encryption_algorithm" name="encryption_algorithm" class="form-control">
-                    <!-- Options will be populated dynamically -->
+                    <option value="AES128">AES128</option>
+                    <option value="AES192">AES192</option>
+                    <option value="AES256">AES256</option>
+                    <option value="AES16-GCM">AES16-GCM</option>
+                    <option value="AES12-GCM">AES12-GCM</option>
+                    <option value="AES8-GCM">AES8-GCM</option>
+                    <option value="AES16-CCM">AES16-CCM</option>
+                    <option value="AES12-CCM">AES12-CCM</option>
+                    <option value="AES8-CCM">AES8-CCM</option>
+                    <option value="CHACHA20_POLY1305">CHACHA20_POLY1305</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="hash_option">Hash</label>
                 <select id="hash_option" name="hash_option" class="form-control">
-                    <!-- Options will be populated dynamically -->
+                    <option value="SHA1">SHA1</option>
+                    <option value="SHA224">SHA224</option>
+                    <option value="SHA256">SHA256</option>
+                    <option value="SHA384">SHA384</option>
+                    <option value="SHA512">SHA512</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="dh_group">DH</label>
                 <select id="dh_group" name="dh_group" class="form-control">
-                    <!-- Options will be populated dynamically -->
+                    <option value="MODP3072">MODP3072</option>
+                    <option value="MODP4096">MODP4096</option>
+                    <option value="MODP6144">MODP6144</option>
+                    <option value="MODP8192">MODP8192</option>
+                    <option value="MODP2048">MODP2048</option>
+                    <option value="MODP1024">MODP1024</option>
+                    <option value="MODP768">MODP768</option>
+                    <option value="CURVE25519">CURVE25519</option>
+                    <option value="CURVE448">CURVE448</option>
+                    <option value="ECP_256">ECP_256</option>
+                    <option value="ECP_384">ECP_384</option>
+                    <option value="ECP_521">ECP_521</option>
+                    <option value="ECP_224">ECP_224</option>
+                    <option value="ECP_192">ECP_192</option>
                 </select>
             </div>
         </div>
@@ -48,49 +74,3 @@
 
     <hr>
 {% endblock form_content %}
-
-<!-- Include Script to Populate Dropdowns Dynamically -->
-{% block extrascripts %}
-    <script>
-        $(document).ready(function () {
-            function populateDropdowns() {
-                $.ajax({
-                    url: "{% url 'get_ipsec_options' %}",
-                    method: "GET",
-                    success: function (data) {
-                        var encryptionAlgorithms = data.encryption_algorithms;
-                        var hashOptions = data.hash_options;
-                        var dhGroups = data.dh_groups;
-
-                        // Populate Encryption Algorithm Dropdown
-                        var encryptionDropdown = $("#encryption_algorithm");
-                        encryptionDropdown.empty();
-                        $.each(encryptionAlgorithms, function (index, algorithm) {
-                            encryptionDropdown.append($('<option></option>').attr('value', algorithm).text(algorithm));
-                        });
-
-                        // Populate Hash Option Dropdown
-                        var hashDropdown = $("#hash_option");
-                        hashDropdown.empty();
-                        $.each(hashOptions, function (index, hash) {
-                            hashDropdown.append($('<option></option>').attr('value', hash).text(hash));
-                        });
-
-                        // Populate DH Group Dropdown
-                        var dhDropdown = $("#dh_group");
-                        dhDropdown.empty();
-                        $.each(dhGroups, function (index, group) {
-                            dhDropdown.append($('<option></option>').attr('value', group).text(group));
-                        });
-                    },
-                    error: function (error) {
-                        console.error("Error fetching IPsec options:", error);
-                    }
-                });
-            }
-
-            // Call function to populate dropdowns on page load
-            populateDropdowns();
-        });
-    </script>
-{% endblock extrascripts %}
