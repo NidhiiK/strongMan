@@ -4,7 +4,7 @@
     <div class="row">
         <p class="col-xs-12">Local certificates</p>
         <div class="col-xs-12">
-            <p>Choose the certificate which authenticates the server. Only certificates with private key's are shown.</p>
+            <p>Choose the certificate which authenticates the server. Only certificates with private keys are shown.</p>
         </div>
     </div>
     {% include "server_connections/forms/CertificatePicker.html" with certificate=form.certificate identity=form.identity %}
@@ -28,25 +28,19 @@
             <div class="form-group">
                 <label for="encryption_algorithm">Encryption</label>
                 <select id="encryption_algorithm" name="encryption_algorithm" class="form-control">
-                    {% for algorithm in encryption_algorithms %}
-                        <option value="{{ algorithm }}">{{ algorithm }}</option>
-                    {% endfor %}
+                    <!-- Options will be populated dynamically -->
                 </select>
             </div>
             <div class="form-group">
                 <label for="hash_option">Hash</label>
                 <select id="hash_option" name="hash_option" class="form-control">
-                    {% for option in hash_options %}
-                        <option value="{{ option }}">{{ option }}</option>
-                    {% endfor %}
+                    <!-- Options will be populated dynamically -->
                 </select>
             </div>
             <div class="form-group">
                 <label for="dh_group">DH</label>
                 <select id="dh_group" name="dh_group" class="form-control">
-                    {% for group in dh_groups %}
-                        <option value="{{ group }}">{{ group }}</option>
-                    {% endfor %}
+                    <!-- Options will be populated dynamically -->
                 </select>
             </div>
         </div>
@@ -54,3 +48,49 @@
 
     <hr>
 {% endblock form_content %}
+
+<!-- Include Script to Populate Dropdowns Dynamically -->
+{% block extrascripts %}
+    <script>
+        $(document).ready(function () {
+            function populateDropdowns() {
+                $.ajax({
+                    url: "{% url 'get_ipsec_options' %}",
+                    method: "GET",
+                    success: function (data) {
+                        var encryptionAlgorithms = data.encryption_algorithms;
+                        var hashOptions = data.hash_options;
+                        var dhGroups = data.dh_groups;
+
+                        // Populate Encryption Algorithm Dropdown
+                        var encryptionDropdown = $("#encryption_algorithm");
+                        encryptionDropdown.empty();
+                        $.each(encryptionAlgorithms, function (index, algorithm) {
+                            encryptionDropdown.append($('<option></option>').attr('value', algorithm).text(algorithm));
+                        });
+
+                        // Populate Hash Option Dropdown
+                        var hashDropdown = $("#hash_option");
+                        hashDropdown.empty();
+                        $.each(hashOptions, function (index, hash) {
+                            hashDropdown.append($('<option></option>').attr('value', hash).text(hash));
+                        });
+
+                        // Populate DH Group Dropdown
+                        var dhDropdown = $("#dh_group");
+                        dhDropdown.empty();
+                        $.each(dhGroups, function (index, group) {
+                            dhDropdown.append($('<option></option>').attr('value', group).text(group));
+                        });
+                    },
+                    error: function (error) {
+                        console.error("Error fetching IPsec options:", error);
+                    }
+                });
+            }
+
+            // Call function to populate dropdowns on page load
+            populateDropdowns();
+        });
+    </script>
+{% endblock extrascripts %}
