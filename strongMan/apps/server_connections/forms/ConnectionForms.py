@@ -7,51 +7,51 @@ from strongMan.apps.server_connections.models.connections import IKEv2Certificat
     IKEv2CertificateEAP, IKEv2EapTls, Ike2Psk, Connection
 
 
-# from django import forms
+from django import forms
 
-# class ProposalForm(forms.Form):
-#     encryption_algorithm_choices = [
-#         ("AES128", "AES128"),
-#         ("AES192", "AES192"),
-#         ("AES256", "AES256"),
-#         ("AES16-GCM", "AES16-GCM"),
-#         ("AES12-GCM", "AES12-GCM"),
-#         ("AES8-GCM", "AES8-GCM"),
-#         ("AES16-CCM", "AES16-CCM"),
-#         ("AES12-CCM", "AES12-CCM"),
-#         ("AES8-CCM", "AES8-CCM"),
-#         ("CHACHA20_POLY1305", "CHACHA20_POLY1305"),
-#     ]
+class ProposalForm(forms.Form):
+    encryption_algorithm_choices = [
+        ("AES128", "AES128"),
+        ("AES192", "AES192"),
+        ("AES256", "AES256"),
+        ("AES16-GCM", "AES16-GCM"),
+        ("AES12-GCM", "AES12-GCM"),
+        ("AES8-GCM", "AES8-GCM"),
+        ("AES16-CCM", "AES16-CCM"),
+        ("AES12-CCM", "AES12-CCM"),
+        ("AES8-CCM", "AES8-CCM"),
+        ("CHACHA20_POLY1305", "CHACHA20_POLY1305"),
+    ]
 
-#     hash_option_choices = [
-#         ("SHA1", "SHA1"),
-#         ("SHA224", "SHA224"),
-#         ("SHA256", "SHA256"),
-#         ("SHA384", "SHA384"),
-#         ("SHA512", "SHA512"),
-#         ("md5"),("md5"),
-#     ]
+    hash_option_choices = [
+        ("SHA1", "SHA1"),
+        ("SHA224", "SHA224"),
+        ("SHA256", "SHA256"),
+        ("SHA384", "SHA384"),
+        ("SHA512", "SHA512"),
+        ("md5"),("md5"),
+    ]
 
-#     dh_group_choices = [
-#         ("MODP3072", "MODP3072"),
-#         ("MODP4096", "MODP4096"),
-#         ("MODP6144", "MODP6144"),
-#         ("MODP8192", "MODP8192"),
-#         ("MODP2048", "MODP2048"),
-#         ("MODP1024", "MODP1024"),
-#         ("MODP768", "MODP768"),
-#         ("CURVE25519", "CURVE25519"),
-#         ("CURVE448", "CURVE448"),
-#         ("ECP_256", "ECP_256"),
-#         ("ECP_384", "ECP_384"),
-#         ("ECP_521", "ECP_521"),
-#         ("ECP_224", "ECP_224"),
-#         ("ECP_192", "ECP_192"),
-#     ]
+    dh_group_choices = [
+        ("MODP3072", "MODP3072"),
+        ("MODP4096", "MODP4096"),
+        ("MODP6144", "MODP6144"),
+        ("MODP8192", "MODP8192"),
+        ("MODP2048", "MODP2048"),
+        ("MODP1024", "MODP1024"),
+        ("MODP768", "MODP768"),
+        ("CURVE25519", "CURVE25519"),
+        ("CURVE448", "CURVE448"),
+        ("ECP_256", "ECP_256"),
+        ("ECP_384", "ECP_384"),
+        ("ECP_521", "ECP_521"),
+        ("ECP_224", "ECP_224"),
+        ("ECP_192", "ECP_192"),
+    ]
 
-#     encryption_algorithm = forms.ChoiceField(choices=encryption_algorithm_choices)
-#     hash_option = forms.ChoiceField(choices=hash_option_choices)
-#     dh_group = forms.ChoiceField(choices=dh_group_choices)
+    encryption_algorithm = forms.ChoiceField(choices=encryption_algorithm_choices)
+    hash_option = forms.ChoiceField(choices=hash_option_choices)
+    dh_group = forms.ChoiceField(choices=dh_group_choices)
 
 
 
