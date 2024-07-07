@@ -42,7 +42,7 @@
 
     <hr>
 
-    <!-- Render remaining form fields explicitly to avoid duplication -->
+    {% comment %} <!-- Render remaining form fields explicitly to avoid duplication -->
     <div class="form-group">
         <label for="id_profile">Profile</label>
         {{ form.profile }}
@@ -78,5 +78,5 @@
     <div class="form-group">
         <label for="id_initiate">Initiate</label>
         {{ form.initiate }}
-    </div>
+    </div> {% endcomment %}
 {% endblock form_content %}
