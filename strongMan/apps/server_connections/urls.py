@@ -1,7 +1,7 @@
 from django.urls import re_path
 
 from . import views
-# from .views.ProposalHandler import IpsecOptionsHandler
+from .views.ProposalHandler import IpsecOptionsHandler
 
 app_name = 'server_connections'
 urlpatterns = [
@@ -17,6 +17,6 @@ urlpatterns = [
     re_path(r'poolpicker/$', views.get_poolpicker, name='poolpicker'),
     re_path(r'certificatepicker/$', views.get_certificatepicker, name='certificatepicker'),
     re_path(r'capicker/$', views.get_capicker, name='capicker'),
-    # re_path(r'get-ipsec-options/', IpsecOptionsHandler.as_view(), name='get_ipsec_options'),
+    re_path(r'get-ipsec-options/', IpsecOptionsHandler.as_view(), name='get_ipsec_options'),
     
 ]
