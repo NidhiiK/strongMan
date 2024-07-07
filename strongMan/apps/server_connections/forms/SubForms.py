@@ -7,7 +7,6 @@ from .FormFields import CertificateChoice, IdentityChoice, PoolChoice
 from strongMan.apps.pools.models import Pool
 
 
-
 class HeaderForm(forms.Form):
     connection_id = forms.IntegerField(required=False)
     profile = forms.CharField(max_length=50, initial="")

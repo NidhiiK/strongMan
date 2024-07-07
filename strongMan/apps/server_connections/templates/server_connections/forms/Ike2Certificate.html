@@ -20,7 +20,7 @@
     {% include "server_connections/forms/CaPicker.html" with form=form %}
 
     <hr>
-
+{% comment %} 
     <!-- New Section for Encryption Algorithm Options -->
     <div class="row">
         <div class="col-xs-12">
@@ -78,5 +78,5 @@
     <div class="form-group">
         <label for="id_initiate">Initiate</label>
         {{ form.initiate }}
-    </div>
+    </div> {% endcomment %}
 {% endblock form_content %}
