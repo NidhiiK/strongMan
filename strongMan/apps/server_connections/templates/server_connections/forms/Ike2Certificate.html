@@ -26,31 +26,57 @@
         <div class="col-xs-12">
             <p>Encryption Algorithm</p>
             <div class="form-group">
-                <label for="encryption_algorithm">Encryption</label>
-                <select id="encryption_algorithm" name="encryption_algorithm" class="form-control">
-                    {% for algorithm in encryption_algorithms %}
-                        <option value="{{ algorithm }}">{{ algorithm }}</option>
-                    {% endfor %}
-                </select>
+                <label for="id_encryption_algorithm">Encryption</label>
+                {{ form.encryption_algorithm }}
             </div>
             <div class="form-group">
-                <label for="hash_option">Hash</label>
-                <select id="hash_option" name="hash_option" class="form-control">
-                    {% for option in hash_options %}
-                        <option value="{{ option }}">{{ option }}</option>
-                    {% endfor %}
-                </select>
+                <label for="id_hash_option">Hash</label>
+                {{ form.hash_option }}
             </div>
             <div class="form-group">
-                <label for="dh_group">DH</label>
-                <select id="dh_group" name="dh_group" class="form-control">
-                    {% for group in dh_groups %}
-                        <option value="{{ group }}">{{ group }}</option>
-                    {% endfor %}
-                </select>
+                <label for="id_dh_group">DH</label>
+                {{ form.dh_group }}
             </div>
         </div>
     </div>
 
     <hr>
+
+    <!-- Explicitly render remaining form fields to avoid duplication -->
+    <div class="form-group">
+        <label for="id_profile">Profile</label>
+        {{ form.profile }}
+    </div>
+    <div class="form-group">
+        <label for="id_local_addrs">Local Addresses</label>
+        {{ form.local_addrs }}
+    </div>
+    <div class="form-group">
+        <label for="id_remote_addrs">Remote Addresses</label>
+        {{ form.remote_addrs }}
+    </div>
+    <div class="form-group">
+        <label for="id_version">IKE Version</label>
+        {{ form.version }}
+    </div>
+    <div class="form-group">
+        <label for="id_send_certreq">Send Certificate Request</label>
+        {{ form.send_certreq }}
+    </div>
+    <div class="form-group">
+        <label for="id_local_ts">Local Traffic Selector</label>
+        {{ form.local_ts }}
+    </div>
+    <div class="form-group">
+        <label for="id_remote_ts">Remote Traffic Selector</label>
+        {{ form.remote_ts }}
+    </div>
+    <div class="form-group">
+        <label for="id_start_action">Start Action</label>
+        {{ form.start_action }}
+    </div>
+    <div class="form-group">
+        <label for="id_initiate">Initiate</label>
+        {{ form.initiate }}
+    </div>
 {% endblock form_content %}
