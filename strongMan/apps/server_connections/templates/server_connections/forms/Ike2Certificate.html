@@ -23,104 +23,64 @@
     <hr>
 
     <!-- New Section for Encryption Algorithm Options -->
- <!-- New Section for Encryption Algorithm Options -->
-<div class="row">
-    <p class="col-xs-12">Encryption Algorithm</p>
-    <div class="col-xs-12">
-        <p>Choose the encryption algorithm, hash option, and DH group for the connection.</p>
-    </div>
-</div>
-<div id="encryption_algorithm_picker">
-    <!-- Include the form fields directly within this section -->
-    <div class="row certificate_picker">
-        <label class="control-label col-sm-3 col-xs-12" for="id_encryption_algorithm">Encryption</label>
-        <div class="col-sm-8 col-xs-10">
-            <select class="selectpicker" data-live-search="true"
-                    name="encryption_algorithm" id="id_encryption_algorithm" data-show-subtext="True">
-                {% for value, label in form.encryption_algorithm.field.choices %}
-                    <option value="{{ value }}" {% if form.encryption_algorithm.value == value %}selected{% endif %}>
-                        {{ label }}
-                    </option>
-                {% endfor %}
-            </select>
-            {% include "server_connections/forms/../widgets/errormsg.html" with field=form.encryption_algorithm %}
-        </div>
-        <div class="col-sm-1 col-xs-2">
-            {% include "server_connections/widgets/QuestionPopover.html" with title="Encryption help" content="Select the encryption algorithm for the connection." %}
+    <div class="row">
+        <p class="col-xs-12">Encryption Algorithm</p>
+        <div class="col-xs-12">
+            <p>Choose the encryption algorithm, hash option, and DH group for the connection.</p>
         </div>
     </div>
-    <div class="row identity_picker">
-        <label class="control-label col-sm-3 col-xs-12" for="id_hash_option">Hash</label>
-        <div class="col-sm-8 col-xs-10">
-            <select class="selectpicker" data-live-search="true"
-                    name="hash_option" id="id_hash_option" data-show-subtext="True">
-                {% for value, label in form.hash_option.field.choices %}
-                    <option value="{{ value }}" {% if form.hash_option.value == value %}selected{% endif %}>
-                        {{ label }}
-                    </option>
-                {% endfor %}
-            </select>
-            {% include "server_connections/forms/../widgets/errormsg.html" with field=form.hash_option %}
+    <div id="encryption_algorithm_picker">
+        <div class="row certificate_picker">
+            <label class="control-label col-sm-3 col-xs-12" for="id_encryption_algorithm">Encryption</label>
+            <div class="col-sm-8 col-xs-10">
+                <select class="selectpicker" data-live-search="true"
+                        name="encryption_algorithm" id="id_encryption_algorithm" data-show-subtext="True">
+                    {% for value, label in form.encryption_algorithm.field.choices %}
+                        <option value="{{ value }}" {% if form.encryption_algorithm.value == value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                    {% endfor %}
+                </select>
+                {% include "server_connections/forms/../widgets/errormsg.html" with field=form.encryption_algorithm %}
+            </div>
+            <div class="col-sm-1 col-xs-2">
+                {% include "server_connections/widgets/QuestionPopover.html" with title="Encryption help" content="Select the encryption algorithm for the connection." %}
+            </div>
         </div>
-        <div class="col-sm-1 col-xs-2">
-            {% include "server_connections/widgets/QuestionPopover.html" with title="Hash help" content="Select the hash option for the connection." %}
+        <div class="row identity_picker">
+            <label class="control-label col-sm-3 col-xs-12" for="id_hash_option">Hash</label>
+            <div class="col-sm-8 col-xs-10">
+                <select class="selectpicker" data-live-search="true"
+                        name="hash_option" id="id_hash_option" data-show-subtext="True">
+                    {% for value, label in form.hash_option.field.choices %}
+                        <option value="{{ value }}" {% if form.hash_option.value == value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                    {% endfor %}
+                </select>
+                {% include "server_connections/forms/../widgets/errormsg.html" with field=form.hash_option %}
+            </div>
+            <div class="col-sm-1 col-xs-2">
+                {% include "server_connections/widgets/QuestionPopover.html" with title="Hash help" content="Select the hash option for the connection." %}
+            </div>
+        </div>
+        <div class="row certificate_picker">
+            <label class="control-label col-sm-3 col-xs-12" for="id_dh_group">DH</label>
+            <div class="col-sm-8 col-xs-10">
+                <select class="selectpicker" data-live-search="true"
+                        name="dh_group" id="id_dh_group" data-show-subtext="True">
+                    {% for value, label in form.dh_group.field.choices %}
+                        <option value="{{ value }}" {% if form.dh_group.value == value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                    {% endfor %}
+                </select>
+                {% include "server_connections/forms/../widgets/errormsg.html" with field=form.dh_group %}
+            </div>
+            <div class="col-sm-1 col-xs-2">
+                {% include "server_connections/widgets/QuestionPopover.html" with title="DH Group help" content="Select the Diffie-Hellman group for the connection." %}
+            </div>
         </div>
     </div>
-    <div class="row certificate_picker">
-        <label class="control-label col-sm-3 col-xs-12" for="id_dh_group">DH</label>
-        <div class="col-sm-8 col-xs-10">
-            <select class="selectpicker" data-live-search="true"
-                    name="dh_group" id="id_dh_group" data-show-subtext="True">
-                {% for value, label in form.dh_group.field.choices %}
-                    <option value="{{ value }}" {% if form.dh_group.value == value %}selected{% endif %}>
-                        {{ label }}
-                    </option>
-                {% endfor %}
-            </select>
-            {% include "server_connections/forms/../widgets/errormsg.html" with field=form.dh_group %}
-        </div>
-        <div class="col-sm-1 col-xs-2">
-            {% include "server_connections/widgets/QuestionPopover.html" with title="DH Group help" content="Select the Diffie-Hellman group for the connection." %}
-        </div>
-    </div>
-
-    <!-- Render remaining form fields here to avoid duplication -->
-    <div class="form-group">
-        <label for="id_profile">Profile</label>
-        {{ form.profile }}
-    </div>
-    <div class="form-group">
-        <label for="id_local_addrs">Local Addresses</label>
-        {{ form.local_addrs }}
-    </div>
-    <div class="form-group">
-        <label for="id_remote_addrs">Remote Addresses</label>
-        {{ form.remote_addrs }}
-    </div>
-    <div class="form-group">
-        <label for="id_version">IKE Version</label>
-        {{ form.version }}
-    </div>
-    <div class="form-group">
-        <label for="id_send_certreq">Send Certificate Request</label>
-        {{ form.send_certreq }}
-    </div>
-    <div class="form-group">
-        <label for="id_local_ts">Local Traffic Selector</label>
-        {{ form.local_ts }}
-    </div>
-    <div class="form-group">
-        <label for="id_remote_ts">Remote Traffic Selector</label>
-        {{ form.remote_ts }}
-    </div>
-    <div class="form-group">
-        <label for="id_start_action">Start Action</label>
-        {{ form.start_action }}
-    </div>
-    <div class="form-group">
-        <label for="id_initiate">Initiate</label>
-        {{ form.initiate }}
-    </div>
-</div>
 
 {% endblock form_content %}
