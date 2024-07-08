@@ -19,7 +19,6 @@ class HeaderForm(forms.Form):
     remote_ts = forms.CharField(max_length=50, initial="", required=False)
     start_action = forms.ChoiceField(widget=forms.Select(), choices=Child.START_ACTION_CHOICES, required=False)
     initiate = forms.BooleanField(required=False)
-    # Other fields remain the same...
 
     encryption_algorithm = forms.ChoiceField(choices=[
         ("aes128", "AES128"),
@@ -86,9 +85,6 @@ class HeaderForm(forms.Form):
         self.initial['local_ts'] = connection.server_children.first().server_local_ts.first().value
         self.initial['remote_ts'] = connection.server_children.first().server_remote_ts.first().value
         self.initial['start_action'] = connection.server_children.first().start_action
-        self.initial['encryption_algorithm'] = connection.encryption_algorithm
-        self.initial['hash_option'] = connection.hash_option
-        self.initial['dh_group'] = connection.dh_group
         if connection.is_site_to_site():
             self.initial['initiate'] = connection.initiate
 
@@ -101,10 +97,6 @@ class HeaderForm(forms.Form):
         self._set_addresses(connection, child, self.cleaned_data['local_addrs'],
                             self.cleaned_data['remote_addrs'], self.cleaned_data['local_ts'],
                             self.cleaned_data['remote_ts'])
-        connection.encryption_algorithm = self.cleaned_data['encryption_algorithm']
-        connection.hash_option = self.cleaned_data['hash_option']
-        connection.dh_group = self.cleaned_data['dh_group']
-        connection.save()
 
     def update_connection(self, connection):
         Child.objects.filter(connection=connection).update(name=self.cleaned_data['profile'],
@@ -119,9 +111,6 @@ class HeaderForm(forms.Form):
         connection.version = self.cleaned_data['version']
         connection.send_certreq = self.cleaned_data["send_certreq"]
         connection.initiate = self.cleaned_data['initiate']
-        connection.encryption_algorithm = self.cleaned_data['encryption_algorithm']
-        connection.hash_option = self.cleaned_data['hash_option']
-        connection.dh_group = self.cleaned_data['dh_group']
         connection.save()
 
     def model(self):
@@ -149,7 +138,6 @@ class HeaderForm(forms.Form):
         Address(value=remote_addrs, remote_addresses=connection).save()
         Address(value=local_ts, local_ts=child).save()
         Address(value=remote_ts, remote_ts=child).save()
-
 
 class PoolForm(forms.Form):
     pool = PoolChoice(queryset=Pool.objects.none(), label="Pools", empty_label="Nothing selected",
