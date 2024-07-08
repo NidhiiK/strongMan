@@ -137,7 +137,6 @@ class HeaderForm(forms.Form):
         Address(value=local_ts, local_ts=child).save()
         Address(value=remote_ts, remote_ts=child).save()
 
-
 class PoolForm(forms.Form):
     pool = PoolChoice(queryset=Pool.objects.none(), label="Pools", empty_label="Nothing selected",
                       required=False)
