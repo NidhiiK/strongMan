@@ -8,6 +8,7 @@ from strongMan.apps.pools.models import Pool
 
 
 class HeaderForm(forms.Form):
+
     connection_id = forms.IntegerField(required=False)
     profile = forms.CharField(max_length=50, initial="")
     local_addrs = forms.CharField(max_length=50, initial="", required=False)
@@ -19,6 +20,7 @@ class HeaderForm(forms.Form):
     start_action = forms.ChoiceField(widget=forms.Select(), choices=Child.START_ACTION_CHOICES, required=False)
     initiate = forms.BooleanField(required=False)
     # Other fields remain the same...
+
     encryption_algorithm = forms.ChoiceField(choices=[
         ("aes128", "AES128"),
         ("aes192", "AES192"),
