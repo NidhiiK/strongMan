@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.http import JsonResponse
-from ..forms import HeaderForm
+from ..forms.SubForms import HeaderForm
 from ..models import Proposal, Connection, Child
 
 class IpsecOptionsHandler(View):
