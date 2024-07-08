@@ -33,18 +33,18 @@ class HeaderForm(forms.Form):
         ("chacha20_poly1305", "CHACHA20_POLY1305")
     ], required=False)
     hash_option = forms.ChoiceField(choices=[
+        ("sha256", "SHA256"),
         ("sha1", "SHA1"),
         ("sha224", "SHA224"),
-        ("sha256", "SHA256"),
         ("sha384", "SHA384"),
         ("sha512", "SHA512")
     ], required=False)
     dh_group = forms.ChoiceField(choices=[
+        ("modp2048", "MODP2048"),
         ("modp3072", "MODP3072"),
         ("modp4096", "MODP4096"),
         ("modp6144", "MODP6144"),
         ("modp8192", "MODP8192"),
-        ("modp2048", "MODP2048"),
         ("modp1024", "MODP1024"),
         ("modp768", "MODP768"),
         ("curve25519", "CURVE25519"),
@@ -120,14 +120,14 @@ class HeaderForm(forms.Form):
         raise NotImplementedError
 
     def _construct_proposal_type(self):
-        encryption_algorithm = self.cleaned_data.get('encryption_algorithm', 'aes256')
-        hash_option = self.cleaned_data.get('hash_option', 'sha384')
-        dh_group = self.cleaned_data.get('dh_group', 'modp8192')
+        encryption_algorithm = self.cleaned_data.get('encryption_algorithm', 'aes128')
+        hash_option = self.cleaned_data.get('hash_option', 'sha256')
+        dh_group = self.cleaned_data.get('dh_group', 'modp2048')
         return f"{encryption_algorithm}-{hash_option}-{dh_group}"
 
     @staticmethod
     def _set_proposals(connection, child, proposal_type=None):
-        default_proposal = "aes256-sha384-modp8192"
+        default_proposal = "aes128-sha256-modp2048"
         proposal_type = proposal_type or default_proposal
         Proposal(type=proposal_type, connection=connection).save()
         Proposal(type=proposal_type, child=child).save()
