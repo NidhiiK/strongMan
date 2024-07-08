@@ -28,30 +28,30 @@
             <p>Choose the encryption algorithm, hash option, and DH group for the connection.</p>
         </div>
     </div>
-    <div class="row">
+    <div class="row form-group">
         <label class="control-label col-sm-3 col-xs-12" for="id_encryption_algorithm">Encryption</label>
         <div class="col-sm-8 col-xs-10">
-            {{ form.encryption_algorithm }}
+            {{ form.encryption_algorithm|add_class:"form-control" }}
             {% include "server_connections/forms/../widgets/errormsg.html" with field=form.encryption_algorithm %}
         </div>
         <div class="col-sm-1 col-xs-2">
             {% include "server_connections/widgets/QuestionPopover.html" with title="Encryption help" content="Select the encryption algorithm for the connection." %}
         </div>
     </div>
-    <div class="row">
+    <div class="row form-group">
         <label class="control-label col-sm-3 col-xs-12" for="id_hash_option">Hash</label>
         <div class="col-sm-8 col-xs-10">
-            {{ form.hash_option }}
+            {{ form.hash_option|add_class:"form-control" }}
             {% include "server_connections/forms/../widgets/errormsg.html" with field=form.hash_option %}
         </div>
         <div class="col-sm-1 col-xs-2">
             {% include "server_connections/widgets/QuestionPopover.html" with title="Hash help" content="Select the hash option for the connection." %}
         </div>
     </div>
-    <div class="row">
+    <div class="row form-group">
         <label class="control-label col-sm-3 col-xs-12" for="id_dh_group">DH</label>
         <div class="col-sm-8 col-xs-10">
-            {{ form.dh_group }}
+            {{ form.dh_group|add_class:"form-control" }}
             {% include "server_connections/forms/../widgets/errormsg.html" with field=form.dh_group %}
         </div>
         <div class="col-sm-1 col-xs-2">
