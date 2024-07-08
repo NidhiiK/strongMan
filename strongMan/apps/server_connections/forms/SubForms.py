@@ -120,14 +120,14 @@ class HeaderForm(forms.Form):
         raise NotImplementedError
 
     def _construct_proposal_type(self):
-        encryption_algorithm = self.cleaned_data.get('encryption_algorithm', 'aes128')
-        hash_option = self.cleaned_data.get('hash_option', 'sha256')
-        dh_group = self.cleaned_data.get('dh_group', 'modp2048')
+        encryption_algorithm = self.cleaned_data.get('encryption_algorithm', 'aes256')
+        hash_option = self.cleaned_data.get('hash_option', 'sha384')
+        dh_group = self.cleaned_data.get('dh_group', 'modp8192')
         return f"{encryption_algorithm}-{hash_option}-{dh_group}"
 
     @staticmethod
     def _set_proposals(connection, child, proposal_type=None):
-        default_proposal = "aes128-sha256-modp2048"
+        default_proposal = "aes256-sha384-modp8192"
         proposal_type = proposal_type or default_proposal
         Proposal(type=proposal_type, connection=connection).save()
         Proposal(type=proposal_type, child=child).save()
