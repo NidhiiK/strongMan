@@ -8,7 +8,7 @@ from strongMan.apps.pools.models import Pool
 
 
 class HeaderForm(forms.Form):
-   connection_id = forms.IntegerField(required=False)
+    connection_id = forms.IntegerField(required=False)
     profile = forms.CharField(max_length=50, initial="")
     local_addrs = forms.CharField(max_length=50, initial="", required=False)
     remote_addrs = forms.CharField(max_length=50, initial="", required=False)
