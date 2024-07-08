@@ -5,7 +5,7 @@
     <div class="row">
         <p class="col-xs-12">Local certificates</p>
         <div class="col-xs-12">
-            <p>Choose the certificate which authenticates the server. Only certificates with private key's are shown.</p>
+            <p>Choose the certificate which authenticates the server. Only certificates with private keys are shown.</p>
         </div>
     </div>
     {% include "server_connections/forms/CertificatePicker.html" with certificate=form.certificate identity=form.identity %}
@@ -85,7 +85,7 @@
 
     <hr>
 
-    <!-- Only render remaining form fields explicitly -->
+    <!-- Render remaining form fields explicitly to avoid duplication -->
     <div class="form-group">
         <label for="id_profile">Profile</label>
         {{ form.profile }}
