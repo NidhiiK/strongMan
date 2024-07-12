@@ -7,8 +7,8 @@ from .FormFields import CertificateChoice, IdentityChoice, PoolChoice
 from strongMan.apps.pools.models import Pool
 
 
-class HeaderForm(forms.Form):
 
+class HeaderForm(forms.Form):
     connection_id = forms.IntegerField(required=False)
     profile = forms.CharField(max_length=50, initial="")
     local_addrs = forms.CharField(max_length=50, initial="", required=False)
@@ -17,44 +17,9 @@ class HeaderForm(forms.Form):
     send_certreq = forms.BooleanField(initial=True, required=False)
     local_ts = forms.CharField(max_length=50, initial="", required=False)
     remote_ts = forms.CharField(max_length=50, initial="", required=False)
-    start_action = forms.ChoiceField(widget=forms.Select(), choices=Child.START_ACTION_CHOICES, required=False)
+    start_action = forms.ChoiceField(widget=forms.Select(), choices=Child.START_ACTION_CHOICES,
+                                     required=False)
     initiate = forms.BooleanField(required=False)
-
-    encryption_algorithm = forms.ChoiceField(choices=[
-        ("aes128", "AES128"),
-        ("aes192", "AES192"),
-        ("aes256", "AES256"),
-        ("aes16-gcm", "AES16-GCM"),
-        ("aes12-gcm", "AES12-GCM"),
-        ("aes8-gcm", "AES8-GCM"),
-        ("aes16-ccm", "AES16-CCM"),
-        ("aes12-ccm", "AES12-CCM"),
-        ("aes8-ccm", "AES8-CCM"),
-        ("chacha20_poly1305", "CHACHA20_POLY1305")
-    ], required=False)
-    hash_option = forms.ChoiceField(choices=[
-        ("sha256", "SHA256"),
-        ("sha1", "SHA1"),
-        ("sha224", "SHA224"),
-        ("sha384", "SHA384"),
-        ("sha512", "SHA512")
-    ], required=False)
-    dh_group = forms.ChoiceField(choices=[
-        ("modp2048", "MODP2048"),
-        ("modp3072", "MODP3072"),
-        ("modp4096", "MODP4096"),
-        ("modp6144", "MODP6144"),
-        ("modp8192", "MODP8192"),
-        ("modp1024", "MODP1024"),
-        ("modp768", "MODP768"),
-        ("curve25519", "CURVE25519"),
-        ("curve448", "CURVE448"),
-        ("ecp_256", "ECP_256"),
-        ("ecp_384", "ECP_384"),
-        ("ecp_521", "ECP_521"),
-        ("ecp_224", "ECP_224"),
-        ("ecp_192", "ECP_192")
-    ], required=False)
 
     def __init__(self, *args, **kwargs):
         super(HeaderForm, self).__init__(*args, **kwargs)
@@ -92,8 +57,7 @@ class HeaderForm(forms.Form):
         child = Child(name=self.cleaned_data['profile'], connection=connection,
                       start_action=self.cleaned_data['start_action'])
         child.save()
-        proposal_type = self._construct_proposal_type()
-        self._set_proposals(connection, child, proposal_type)
+        self._set_proposals(connection, child)
         self._set_addresses(connection, child, self.cleaned_data['local_addrs'],
                             self.cleaned_data['remote_addrs'], self.cleaned_data['local_ts'],
                             self.cleaned_data['remote_ts'])
@@ -104,9 +68,9 @@ class HeaderForm(forms.Form):
         Address.objects.filter(local_addresses=connection).update(value=self.cleaned_data['local_addrs'])
         Address.objects.filter(remote_addresses=connection).update(value=self.cleaned_data['remote_addrs'])
         Address.objects.filter(local_ts=connection.server_children.first()).update(
-            value=self.cleaned_data['local_ts'])
+                                                                    value=self.cleaned_data['local_ts'])
         Address.objects.filter(remote_ts=connection.server_children.first()).update(
-            value=self.cleaned_data['remote_ts'])
+                                                                    value=self.cleaned_data['remote_ts'])
         connection.profile = self.cleaned_data['profile']
         connection.version = self.cleaned_data['version']
         connection.send_certreq = self.cleaned_data["send_certreq"]
@@ -119,18 +83,10 @@ class HeaderForm(forms.Form):
     def get_choice_name(self):
         raise NotImplementedError
 
-    def _construct_proposal_type(self):
-        encryption_algorithm = self.cleaned_data.get('encryption_algorithm', 'aes128')
-        hash_option = self.cleaned_data.get('hash_option', 'sha256')
-        dh_group = self.cleaned_data.get('dh_group', 'modp2048')
-        return f"{encryption_algorithm}-{hash_option}-{dh_group}"
-
     @staticmethod
-    def _set_proposals(connection, child, proposal_type=None):
-        default_proposal = "aes128-sha256-modp2048"
-        proposal_type = proposal_type or default_proposal
-        Proposal(type=proposal_type, connection=connection).save()
-        Proposal(type=proposal_type, child=child).save()
+    def _set_proposals(connection, child):
+        Proposal(type="aes128-sha256-modp2048", connection=connection).save()
+        Proposal(type="aes128gcm128-modp2048", child=child).save()
 
     @staticmethod
     def _set_addresses(connection, child, local_addrs, remote_addrs, local_ts, remote_ts):
@@ -138,6 +94,139 @@ class HeaderForm(forms.Form):
         Address(value=remote_addrs, remote_addresses=connection).save()
         Address(value=local_ts, local_ts=child).save()
         Address(value=remote_ts, remote_ts=child).save()
+
+
+# class HeaderForm(forms.Form):
+
+#     connection_id = forms.IntegerField(required=False)
+#     profile = forms.CharField(max_length=50, initial="")
+#     local_addrs = forms.CharField(max_length=50, initial="", required=False)
+#     remote_addrs = forms.CharField(max_length=50, initial="", required=False)
+#     version = forms.ChoiceField(widget=forms.RadioSelect(), choices=Connection.VERSION_CHOICES, initial='2')
+#     send_certreq = forms.BooleanField(initial=True, required=False)
+#     local_ts = forms.CharField(max_length=50, initial="", required=False)
+#     remote_ts = forms.CharField(max_length=50, initial="", required=False)
+#     start_action = forms.ChoiceField(widget=forms.Select(), choices=Child.START_ACTION_CHOICES, required=False)
+#     initiate = forms.BooleanField(required=False)
+
+#     encryption_algorithm = forms.ChoiceField(choices=[
+#         ("aes128", "AES128"),
+#         ("aes192", "AES192"),
+#         ("aes256", "AES256"),
+#         ("aes16-gcm", "AES16-GCM"),
+#         ("aes12-gcm", "AES12-GCM"),
+#         ("aes8-gcm", "AES8-GCM"),
+#         ("aes16-ccm", "AES16-CCM"),
+#         ("aes12-ccm", "AES12-CCM"),
+#         ("aes8-ccm", "AES8-CCM"),
+#         ("chacha20_poly1305", "CHACHA20_POLY1305")
+#     ], required=False)
+#     hash_option = forms.ChoiceField(choices=[
+#         ("sha256", "SHA256"),
+#         ("sha1", "SHA1"),
+#         ("sha224", "SHA224"),
+#         ("sha384", "SHA384"),
+#         ("sha512", "SHA512")
+#     ], required=False)
+#     dh_group = forms.ChoiceField(choices=[
+#         ("modp2048", "MODP2048"),
+#         ("modp3072", "MODP3072"),
+#         ("modp4096", "MODP4096"),
+#         ("modp6144", "MODP6144"),
+#         ("modp8192", "MODP8192"),
+#         ("modp1024", "MODP1024"),
+#         ("modp768", "MODP768"),
+#         ("curve25519", "CURVE25519"),
+#         ("curve448", "CURVE448"),
+#         ("ecp_256", "ECP_256"),
+#         ("ecp_384", "ECP_384"),
+#         ("ecp_521", "ECP_521"),
+#         ("ecp_224", "ECP_224"),
+#         ("ecp_192", "ECP_192")
+#     ], required=False)
+
+#     def __init__(self, *args, **kwargs):
+#         super(HeaderForm, self).__init__(*args, **kwargs)
+
+#     def clean_profile(self):
+#         profile = self.cleaned_data['profile']
+#         id = self.cleaned_data['connection_id']
+#         if id is not None:
+#             if Connection.objects.filter(profile=profile).exclude(pk=id).exists():
+#                 raise forms.ValidationError("Connection with same name already exists!")
+#         elif Connection.objects.filter(profile=profile).exists():
+#             raise forms.ValidationError("Connection with same name already exists!")
+#         return profile
+
+#     def clean_remote_addrs(self):
+#         remote_addrs = self.cleaned_data['remote_addrs']
+#         if remote_addrs == '':
+#             if 'initiate' in self.data:
+#                 raise forms.ValidationError("This field is required.")
+#         return remote_addrs
+
+#     def fill(self, connection):
+#         self.initial['profile'] = connection.profile
+#         self.initial['local_addrs'] = connection.server_local_addresses.first().value
+#         self.initial['remote_addrs'] = connection.server_remote_addresses.first().value
+#         self.initial['version'] = connection.version
+#         self.initial['send_certreq'] = connection.send_certreq
+#         self.initial['local_ts'] = connection.server_children.first().server_local_ts.first().value
+#         self.initial['remote_ts'] = connection.server_children.first().server_remote_ts.first().value
+#         self.initial['start_action'] = connection.server_children.first().start_action
+#         if connection.is_site_to_site():
+#             self.initial['initiate'] = connection.initiate
+
+#     def create_connection(self, connection):
+#         child = Child(name=self.cleaned_data['profile'], connection=connection,
+#                       start_action=self.cleaned_data['start_action'])
+#         child.save()
+#         proposal_type = self._construct_proposal_type()
+#         self._set_proposals(connection, child, proposal_type)
+#         self._set_addresses(connection, child, self.cleaned_data['local_addrs'],
+#                             self.cleaned_data['remote_addrs'], self.cleaned_data['local_ts'],
+#                             self.cleaned_data['remote_ts'])
+
+#     def update_connection(self, connection):
+#         Child.objects.filter(connection=connection).update(name=self.cleaned_data['profile'],
+#                                                            start_action=self.cleaned_data['start_action'])
+#         Address.objects.filter(local_addresses=connection).update(value=self.cleaned_data['local_addrs'])
+#         Address.objects.filter(remote_addresses=connection).update(value=self.cleaned_data['remote_addrs'])
+#         Address.objects.filter(local_ts=connection.server_children.first()).update(
+#             value=self.cleaned_data['local_ts'])
+#         Address.objects.filter(remote_ts=connection.server_children.first()).update(
+#             value=self.cleaned_data['remote_ts'])
+#         connection.profile = self.cleaned_data['profile']
+#         connection.version = self.cleaned_data['version']
+#         connection.send_certreq = self.cleaned_data["send_certreq"]
+#         connection.initiate = self.cleaned_data['initiate']
+#         connection.save()
+
+#     def model(self):
+#         raise NotImplementedError
+
+#     def get_choice_name(self):
+#         raise NotImplementedError
+
+#     def _construct_proposal_type(self):
+#         encryption_algorithm = self.cleaned_data.get('encryption_algorithm', 'aes128')
+#         hash_option = self.cleaned_data.get('hash_option', 'sha256')
+#         dh_group = self.cleaned_data.get('dh_group', 'modp2048')
+#         return f"{encryption_algorithm}-{hash_option}-{dh_group}"
+
+#     @staticmethod
+#     def _set_proposals(connection, child, proposal_type=None):
+#         default_proposal = "aes128-sha256-modp2048"
+#         proposal_type = proposal_type or default_proposal
+#         Proposal(type=proposal_type, connection=connection).save()
+#         Proposal(type=proposal_type, child=child).save()
+
+#     @staticmethod
+#     def _set_addresses(connection, child, local_addrs, remote_addrs, local_ts, remote_ts):
+#         Address(value=local_addrs, local_addresses=connection).save()
+#         Address(value=remote_addrs, remote_addresses=connection).save()
+#         Address(value=local_ts, local_ts=child).save()
+#         Address(value=remote_ts, remote_ts=child).save()
 
 class PoolForm(forms.Form):
     pool = PoolChoice(queryset=Pool.objects.none(), label="Pools", empty_label="Nothing selected",
